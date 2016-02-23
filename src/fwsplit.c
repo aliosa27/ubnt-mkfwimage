@@ -113,6 +113,25 @@ fw_parse(const unsigned char* base, unsigned long size, fw_t* fw) {
 						fwp->header->name, fwp->signature->crc, crc);
 			}
 		}
+		
+		if ((strncmp(p->magic, MAGIC_ENDS, MAGIC_LENGTH) == 0) && (i < MAX_PARTS)) {
+			fw_part_t* fwp = &fw->parts[i];
+
+			fwp->header = p;
+			fwp->data = (unsigned char*)p + sizeof(part_t);
+			fwp->data_size = ntohl(p->data_size); 
+			fwp->signature = 
+				(part_crc_t*)(fwp->data + fwp->data_size);
+
+			crc = htonl(crc32(0L, (unsigned char*)p, 
+					  fwp->data_size + sizeof(part_t)));
+			if (crc != fwp->signature->crc) {
+				WARN("Invalid '%s' CRC (claims: %u, but is %u)\n", 
+						fwp->header->name, fwp->signature->crc, crc);
+			}
+		}
+		
+		
 
 		 if ((strncmp(p->magic, MAGIC_EXEC, MAGIC_LENGTH) == 0) && (i < MAX_PARTS)) {
                         fw_part_t* fwp = &fw->parts[i];

@@ -29,6 +29,7 @@
 #define MAGIC_END	"END."
 #define MAGIC_EXEC	"EXEC"
 #define PART_SCRIPT 	"script"
+#define MAGIC_ENDS 	"ENDS"
 #define MAGIC_LENGTH	4
 
 typedef struct header {
