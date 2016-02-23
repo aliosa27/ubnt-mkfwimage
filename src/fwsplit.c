@@ -163,7 +163,7 @@ fw_parse(const unsigned char* base, unsigned long size, fw_t* fw) {
 	fw->part_count = i;
 
 	sig = (signature_t*)p;
-	if (strncmp(sig->magic, MAGIC_END, MAGIC_LENGTH) != 0) {
+	if (strncmp(sig->magic, MAGIC_END, MAGIC_LENGTH) != 0) || (strncmp(sig->magic, MAGIC_ENDS, MAGIC_LENGTH) != 0)  {
 		ERROR("Bad firmware signature\n");
 		return -4;
 	}
